@@ -20,6 +20,10 @@ alias pip-update="pip install --upgrade pip && pip freeze --local | grep -v \
 alias py="python"
 alias PPUU="conda activate PPUU"
 
+# scratch quota
+alias squota='pan_df -h /scratch365/$USER'
+
+
 # Highlight numbers when displaying text files
 alias v="grep --colour=always -nTP '(?<![\w\.])[-+]?[0-9]*[\.eE]?\-?[0-9]+|$'"
 # Send v output to less
@@ -32,8 +36,8 @@ function cv {
 }
 
 # Fix CIMS shit
-unalias mv
-unalias rm
+# unalias mv
+# unalias rm
 export PROMPT_COMMAND=""
 
 # Git stuff

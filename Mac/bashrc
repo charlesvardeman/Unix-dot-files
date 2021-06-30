@@ -163,11 +163,11 @@ export FE2="crcfe02.$CRC"
 export CAML="caml.$CRC"
 
 # and corresponding ALIASes
-alias sCRC="ssh $FE1"
-alias sGPU="ssh $CAML"
+alias FE1="ssh $FE1"
+alias CAML="ssh $CAML"
 
 # with X forwarding
-alias sCRCX="ssh -Y $FE1"
+alias FE1X="ssh -Y $FE1"
 
 # Find and open papers #########################################################
 # Adapted from https://superuser.com/a/1293358/224792
