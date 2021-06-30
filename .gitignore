@@ -1,0 +1,3 @@
+# Ignore Vim's vundle
+/Vim/vim/bindle/
+Vim/vim/netrwhist
