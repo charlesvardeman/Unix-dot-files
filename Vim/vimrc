@@ -1,0 +1,144 @@
+source ~/.vim/myBundle.vim
+syntax enable
+set number
+set nowrap
+
+" Use specific spacing for different formats
+" expandtab, et:    <Tab> -> spaces
+" tabstop, ts:      length of a <Tab>
+" shiftwidth, sw:   spaces for autoindent
+" softtabstop, sts: how many spaces a <Tab> inserts or <BS> removes
+set et ts=4 sw=4 sts=4
+au FileType verilog,matlab setl et ts=4 sw=4 sts=4
+au FileType lua setl et ts=3 sw=3 sts=3
+au FileType c,cuda,tex,bib setl et ts=2 sw=2 sts=2
+au FileType gitcommit setl tw=0 cc=0
+
+" Status bar formatting
+set laststatus=2
+set statusline=[%n]%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+
+" dracula settings """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme dracula
+hi Normal guifg=#F9F8F2 guibg=#1B1D1E ctermfg=252 ctermbg=233
+hi CursorLine ctermbg=234 cterm=none guibg=#293739
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Markdown hack
+function! MathAndLiquid()
+    "" Define certain regions
+    " Block math. Look for "$$[anything]$$"
+    syn region math start=/\$\$/ end=/\$\$/
+    " inline math. Look for "$[not $][anything]$"
+    syn match math_block '\$[^$].\{-}\$'
+
+    " Liquid single line. Look for "{%[anything]%}"
+    syn match liquid '{%.*%}'
+    " Liquid multiline. Look for "{%[anything]%}[anything]{%[anything]%}"
+    syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
+    " Fenced code blocks, used in GitHub Flavored Markdown (GFM)
+    syn region highlight_block start='```' end='```'
+
+    "" Actually highlight those regions.
+    hi link math Statement
+    hi link liquid Statement
+    hi link highlight_block Function
+    hi link math_block Function
+endfunction
+
+" Call everytime we open a Markdown file
+autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
+" Text limit
+set textwidth=80 colorcolumn=81 cursorline
+autocmd FileType python setlocal tw=120 cc=121
+
+" Show tabs and trailing spaces.
+set encoding=utf-8
+set list listchars=tab:▸\ ,trail:·
+
+" Unrecogised extensions fix
+au BufRead,BufNewFile *.rockspec setl filetype=lua
+au BufRead,BufNewFile *.plt setl filetype=gnuplot
+au BufRead,BufNewFile *.md setl filetype=markdown tw=0 cc=0 wrap lbr spell
+
+" Ask to clean all trailing white-spaces upon saving
+autocmd BufWritePre * :%s/\s\+$//ec
+
+" Set HighLight Search by default. :noh for toggling
+set hls
+
+" Wildmenu
+set wildmode=longest,list,full
+set wildmenu
+
+" Automatically switch between syntax and manual foldmethod
+au FileType java,c,bib,lua setlocal fdm=syntax fdc=4 aw
+autocmd InsertLeave,WinEnter *.{java,c,bib,lua} setlocal foldmethod=syntax
+autocmd InsertEnter,WinLeave *.{java,c,bib,lua} setlocal foldmethod=manual
+
+" Extensions settings """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TeX settings
+let g:tex_flavor = "latex"
+au FileType tex,bib setlocal cc=0 wrap aw fdm=syntax tw=0 cole=2 lbr spell
+au FileType tex,bib let b:delimitMate_quotes = '$'
+au FileType tex,bib let b:delimitMate_matchpairs = "<:>,(:),[:],{:},`:'"
+au FileType tex,bib let b:delimitMate_smart_matchpairs = '^\%(\w\|\!\|[£]\|[^[:space:][:punct:]]\)'
+set spellfile=$HOME/Dropbox/Vim/Dics/en-TeX.utf-8.add
+set spelllang=en_gb
+
+" Remap leader key to the spacebar
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
+" Clipboard functionality (paste from system)
+vnoremap <leader>y "+y
+nnoremap <leader>y "+y
+vnoremap <leader>p "+p
+nnoremap <leader>p "+p"
+
+" Save the current buffer using the leader key
+noremap <Leader>w :w<CR>
+
+" Save and exit Vim using the leader key
+noremap <Leader>e :wq<CR>
+
+" Exit without saving using the leader key
+noremap <Leader>q :q!<CR>
+
+
+
+" Expand <CR>
+let delimitMate_expand_cr = 1
+set backspace=2
+
+" Enable Python highlight
+let g:python_highlight_all = 1
+
+" Use italic in the terminal
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+
+" Vim-indent-guides settings
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+hi IndentGuidesOdd   ctermbg=234 guibg=#262626
+hi IndentGuidesEven  ctermbg=235 guibg=#303030
+let g:indent_guides_exclude_filetypes = ['help', 'notes']
+
+" Configure Vim-Note plugin
+let g:notes_directories = ["$HOME/Dropbox/Vim/Notes/"]
+
+" Configure Vim-Lua improved syntax parser
+hi def link luaSpecialValue Identifier
+hi def link luaFuncKeyword Function
+hi def link luaFuncCall Normal
+
+" Configure GitGutter plugin: add / checkout / diff
+nmap <Leader>ha <Plug>GitGutterStageHunk
+nmap <Leader>hc <Plug>GitGutterUndoHunk
+nmap <Leader>hd <Plug>GitGutterPreviewHunk
+
+" Configure Jupytext plugin
+let g:jupytext_fmt = 'py:percent'
+let g:jupytext_filetype_map = {'py': 'python'}
