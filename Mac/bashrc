@@ -36,7 +36,7 @@ alias dps='docker ps'
 alias server='python -m http.server 3030'
 
 
-
+alias 'sha256=shasum'
 alias 'ttop=top -ocpu -R -F -s 2 -n30'
 alias 'thtop= htop -s PERCENT_CPU'
 
@@ -191,6 +191,7 @@ function openpaper {
 }
 
 # CUDA #########################################################################
-export PATH=$PATH':/usr/local/cuda/bin'
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH':/usr/local/cuda/lib'
+#export PATH=$PATH':/usr/local/cuda/bin'
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH':/usr/local/cuda/lib'
+
 
